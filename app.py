@@ -31,8 +31,12 @@ def index():
     return render_template('index.html', msg='')
 
 
-@app.route('/pythonlogin/', methods=['GET', 'POST'])
+@app.route('/login/', methods=['GET', 'POST'])
 def login():
+
+    if(session):
+        if(session["loggedin"]):
+            return "hello"
   
     msg = ''
 
