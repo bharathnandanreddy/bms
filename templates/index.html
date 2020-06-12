@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-    home page
+    Login
 {% endblock title %}
 
 
@@ -9,14 +9,14 @@
 <div class="login">
     <h1>BMS</h1>
     <div class="links">
-        <a href="{{ url_for('login') }}" class="active">Customer</a>
-        <a href="{{ url_for('login') }}">Employee</a>
+        <a href="{{ url_for('logas',emp='customer') }}" class={{cust}}>Customer</a>
+        <a href="{{ url_for('logas',emp='employee') }}" class={{emp}}>Employee</a>
     </div>
     <form action="{{ url_for('login') }}" method="post">
         <label for="username">
             <i class="fas fa-user"></i>
         </label>
-        <input type="text" name="username" placeholder="Username" id="username" required>
+        <input type="text" name=id placeholder={{username}} id="username" required>
         <label for="password">
             <i class="fas fa-lock"></i>
         </label>

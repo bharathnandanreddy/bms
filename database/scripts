@@ -31,4 +31,23 @@ VALUES
     ('user1', 'password', '2016-01-01 00:00:01');
 
 
+
+
+creating empstore for login details
+
+>  create table empstore(
+   user_id VARCHAR(100) NOT NULL,
+   password VARCHAR(100) NOT NULL,
+   timestamp timestamp,
+   PRIMARY KEY ( user_id ));
+
+
+InserTing values 
+
+> INSERT INTO empstore
+
+VALUES
+    ('user2', 'password', '2016-01-01 00:00:01');
+
+
 -----------------------------------------------------------------------------------------------

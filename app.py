@@ -22,30 +22,65 @@ app.config['MYSQL_DB'] = 'bms'
 
 
 mysql = MySQL(app)
+employee=False
+user_view="customer-ID"
+empVisible=""
+custVisible="active"
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if(session):
         if(session["loggedin"]):
             return "hello"
-    return render_template('index.html', msg='')
+    
+    return render_template('index.html',username=user_view, msg='',emp=empVisible,cust=custVisible)
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login/<string:emp>', methods=['GET', 'POST'])
+def logas(emp):
+    if(emp=="employee"):
+        global empVisible       
+        global custVisible        
+        global employee
+        global user_view
+        custVisible=""
+        employee=True
+        user_view="Employee-ID"
+        empVisible="active"
+        return render_template('index.html',username=user_view, msg='',emp=empVisible,cust=custVisible)
+    else:
+       
+        empVisible=""
+        custVisible="active"
+        employee=False
+        user_view="Customer-ID"
+        return render_template('index.html',username=user_view, msg='',emp=empVisible,cust=custVisible)
+
+@app.route('/home', methods=['GET', 'POST'])
 def login():
-
     if(session):
         if(session["loggedin"]):
             return "hello"
-  
+
+
+
     msg = ''
 
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
-        username = request.form['username']
+    print(request.form)
+
+    if request.method == 'POST' and 'id' in request.form and 'password' in request.form:
+
+        
+
+        username = request.form['id']
         password = request.form['password']
       
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM userstore WHERE user_id = %s AND password = %s', (username, password))
+
+        if(employee):
+            cursor.execute('SELECT * FROM empstore WHERE user_id = %s AND password = %s', (username, password))
+        else:
+            cursor.execute('SELECT * FROM userstore WHERE user_id = %s AND password = %s', (username, password))
         # Fetch one record and return result
         account = cursor.fetchone()
         # If account exists 
@@ -57,15 +92,26 @@ def login():
             ts = time.time()
             timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
             print(timestamp)
-            cursor.execute('UPDATE userstore SET timestamp = %s WHERE  user_id = %s;',(timestamp,account['user_id']))
+            if(employee):
+                cursor.execute('UPDATE empstore SET timestamp = %s WHERE  user_id = %s;',(timestamp,account['user_id']))
+            else:
+                cursor.execute('UPDATE userstore SET timestamp = %s WHERE  user_id = %s;',(timestamp,account['user_id']))
+
+            
             mysql.connection.commit()
             # Redirecting to home page
-            return 'Logged in successfully!'
+            if(employee):
+                return  render_template('empHome.html')
+            else:
+                return render_template('custHome.html')
         else:
             # Account doesnt exist 
+            
             msg = 'Incorrect username/password!!!'
     # Show the login form with message (if any)
-    return render_template('index.html', msg=msg)
+    
+    return render_template('index.html',username=user_view, msg=msg,emp=empVisible,cust=custVisible)
+
 
 
 if __name__ == '__main__':
