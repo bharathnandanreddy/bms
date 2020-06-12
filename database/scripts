@@ -10,7 +10,7 @@ creating USER
 creating database bms
 
 >  create database bms;
->  use databse bms;
+>  use bms;
 
 ------------------------------------------------------------------------------------------
 
@@ -19,7 +19,6 @@ creating userstore for login details
 >  create table userstore(
    user_id VARCHAR(100) NOT NULL,
    password VARCHAR(100) NOT NULL,
-   role VARCHAR(40) NOT NULL,
    timestamp timestamp,
    PRIMARY KEY ( user_id ));
 
@@ -29,7 +28,7 @@ InserTing values
 > INSERT INTO userstore
 
 VALUES
-    ('user1', 'password','executive', '2016-01-01 00:00:01');
+    ('user1', 'password', '2016-01-01 00:00:01');
 
 
 -----------------------------------------------------------------------------------------------

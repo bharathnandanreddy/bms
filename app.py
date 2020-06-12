@@ -31,7 +31,7 @@ def index():
     return render_template('index.html', msg='')
 
 
-@app.route('/login/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
 
     if(session):
@@ -63,7 +63,7 @@ def login():
             return 'Logged in successfully!'
         else:
             # Account doesnt exist 
-            msg = 'Incorrect username/password!'
+            msg = 'Incorrect username/password!!!'
     # Show the login form with message (if any)
     return render_template('index.html', msg=msg)
 
