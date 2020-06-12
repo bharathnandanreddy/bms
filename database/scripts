@@ -1,0 +1,14 @@
+creating USER
+
+>  \connect root@localhost;
+>  CREATE USER 'manager'@'localhost' IDENTIFIED BY 'manager';
+>  GRANT ALL PRIVILEGES ON *.* TO 'manager'@'localhost';
+>  \connect manager@localhost
+
+------------------------------------------------------------------------------------------
+
+creating database bms
+
+>  create database bms;
+>  use databse bms;
+>  
