@@ -171,6 +171,50 @@ def customers():
     return redirect('/')
 
 
+
+@app.route('/customer/createcustomer', methods=['GET', 'POST'])
+def createCustomer():
+
+    msg = ''
+
+    if request.method == 'POST' and 'ssn_id' in request.form and 'cust_name' in request.form and 'cust_pass' in request.form and 'age' in request.form and 'add_1' in request.form and 'add_2' in request.form and 'city' in request.form and 'state' in request.form:
+        ssn_id = request.form['ssn_id']
+        cust_name = request.form['cust_name']
+        cust_pass = request.form['cust_pass']
+        age = request.form['age']
+        add_1 = request.form['add_1']
+        add_2 = request.form['add_2']
+        city = request.form['city']
+        state = request.form['state']
+        # Check if customer exists already in database
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM customer WHERE cust_name = %s AND cust_pass = %s', (cust_name, cust_pass))
+        account = cursor.fetchone()
+        # If account exists show error and validation checks
+        if account:
+            msg = 'Account already exists!'
+        elif ssn_id!=9:
+            msg = 'SSN ID should be 9 digits'
+        elif not re.match(r'[A-Za-z]+', cust_name):
+            msg = 'Username must contain only characters'
+        elif not ssn_id or not cust_name or not cust_pass:
+            msg = 'Please fill out the form!'
+        else:
+            # Account doesn't exist and form data is valid, insert into table
+            cursor.execute('INSERT INTO customer(ssn_id, cust_name, cust_pass, age, address_1, address_2, city,state) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)', (ssn_id, cust_name, cust_pass, age, add_1, add_2, city, state))
+            mysql.connection.commit()
+            msg = 'Customer record successfully created'
+    elif request.method == 'POST':
+        # Form is empty
+        msg = 'Please fill out the form!'
+    # Show registration form with message (if any)
+    return render_template('createcustomer.html', msg=msg)
+
+@app.route('/customer/updatecustomer', methods=['GET', 'POST'])
+def updateCustomer():
+    msg=''
+    return render_template('updatecustomer.html',msg=msg)
+
 if __name__ == '__main__':
     app.run(debug=True)
 

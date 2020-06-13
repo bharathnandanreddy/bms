@@ -1,0 +1,40 @@
+{% extends "empbase.html" %}
+
+{% block title %}
+    Home
+{% endblock title %}
+
+
+{% block content %}
+		<div class="register">
+			<h1>Create Customer</h1>
+			<form action="{{ url_for('createCustomer') }}" method="post" autocomplete="off">
+				<label for="ssn_id">SSN ID</label>
+                <input type="number" name="ssn_id" placeholder="Customer SSN ID" id="ssn_id" required>
+                <label for="cust_name"></label>
+				<input type="text" name="cust_name" placeholder="Customer Name" id="cust_name" required>
+				<label for="cust_pass"></label>
+                <input type="password" name="cust_pass" placeholder="Password" id="cust_pass" required>
+                <label for="age"></label>
+                <input type="number" name="age" placeholder="Age" id="age" required>
+                <label for="add_1"></label>
+                <input type="text" name="add_1" placeholder="Address Line 1" id="add_1" required>
+                <label for="add_2"></label>
+                <input type="text" name="add_2" placeholder="Address Line 2" id="add_2" required>
+                <label for="city"></label>
+                <input type="text" name="city" placeholder="City" id="city" required>
+                <label for="state"></label>
+				<input type="text" name="state" placeholder="State" id="state" required>
+				<div class="msg">{{ msg }}</div>
+				<input type="submit" value="Create">
+			</form>
+        </div>
+
+{% endblock content%}
+
+
+{% block scripts %}
+<script>
+    $("#customers").css("color", "#ffffff");
+</script>
+{% endblock scripts %}
