@@ -30,7 +30,7 @@ InserTing values
 VALUES
     ('user1', 'password', '2016-01-01 00:00:01');
 
-
+---------------------------------------------------------------------------------------------------
 
 
 creating empstore for login details
@@ -51,3 +51,21 @@ VALUES
 
 
 -----------------------------------------------------------------------------------------------
+
+creating Employee table for employee details
+
+>  create table employee(
+   emp_id VARCHAR(100) NOT NULL,
+   user_id VARCHAR(100) NOT NULL,
+   emp_name VARCHAR(100) NOT NULL,
+   emp_designation VARCHAR(100) NOT NULL,
+   PRIMARY KEY ( emp_id ),
+   FOREIGN KEY (user_id) REFERENCES empstore(user_id));
+
+
+InserTing values 
+ >  INSERT INTO employee
+ VALUES
+    ('1001','user2','Suresh', 'account executive' );
+
+-------------------------------------------------------------------------------------------------
