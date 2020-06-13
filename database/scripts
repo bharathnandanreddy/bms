@@ -30,7 +30,7 @@ InserTing values
 VALUES
     ('user1', 'password', '2016-01-01 00:00:01');
 
-
+---------------------------------------------------------------------------------------------------
 
 
 creating empstore for login details
@@ -75,3 +75,23 @@ insert values into customer table
 
 > insert into customer(ssn_id, cust_name, cust_pass, age, address_1, address_2, city,state)
   values(123, 'cust1', 'pass1', 40, 'street no 7', 'abc colony', 'hyderabad', 'telangana');
+
+-----------------------------------------------------------------------------------------------
+
+creating Employee table for employee details
+
+>  create table employee(
+   emp_id VARCHAR(100) NOT NULL,
+   user_id VARCHAR(100) NOT NULL,
+   emp_name VARCHAR(100) NOT NULL,
+   emp_designation VARCHAR(100) NOT NULL,
+   PRIMARY KEY ( emp_id ),
+   FOREIGN KEY (user_id) REFERENCES empstore(user_id));
+
+
+InserTing values 
+ >  INSERT INTO employee
+ VALUES
+    ('1001','user2','Suresh', 'account executive' );
+
+-------------------------------------------------------------------------------------------------
