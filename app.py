@@ -31,7 +31,12 @@ custVisible="active"
 def index():
     if(session):
         if(session["loggedin"]):
-            return "hello"
+            global employee
+            employee=session['employee']
+            if(employee):
+                return  render_template('empHome.html')
+            else:
+                return render_template('custHome.html')
     
     return render_template('index.html',username=user_view, msg='',emp=empVisible,cust=custVisible)
 
@@ -60,7 +65,13 @@ def logas(emp):
 def login():
     if(session):
         if(session["loggedin"]):
-            return "hello"
+            global employee
+            employee=session['employee']
+            if(employee):
+                return  render_template('empHome.html')
+            else:
+                return render_template('custHome.html')
+  
 
 
 
@@ -88,6 +99,7 @@ def login():
             # Creating session data
             session['loggedin'] = True
             session['username'] = account['user_id']
+            session['employee']= employee
 
             ts = time.time()
             timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
