@@ -34,7 +34,12 @@ def index():
             global employee
             employee=session['employee']
             if(employee):
-                return  render_template('empHome.html')
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                print(session['userid'])
+                cursor.execute('SELECT * FROM employee WHERE user_id = %s', (session['userid'],))
+                account = cursor.fetchone()
+                if(account):
+                    return  render_template('empHome.html',empname=account['emp_name'])
             else:
                 return render_template('custHome.html')
     
@@ -43,10 +48,21 @@ def index():
 
 @app.route('/login/<string:emp>', methods=['GET', 'POST'])
 def logas(emp):
+
+    if(session):
+        if(session["loggedin"]):
+            global employee
+            employee=session['employee']
+            if(employee):
+                return   redirect('/')
+            else:
+                return  redirect('/')
+
+
     if(emp=="employee"):
         global empVisible       
         global custVisible        
-        global employee
+  
         global user_view
         custVisible=""
         employee=True
@@ -61,16 +77,18 @@ def logas(emp):
         user_view="Customer-ID"
         return render_template('index.html',username=user_view, msg='',emp=empVisible,cust=custVisible)
 
-@app.route('/home', methods=['GET', 'POST'])
+
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if(session):
         if(session["loggedin"]):
             global employee
             employee=session['employee']
             if(employee):
-                return  render_template('empHome.html')
+                return   redirect('/')
             else:
-                return render_template('custHome.html')
+                return  redirect('/')
   
 
 
@@ -112,10 +130,8 @@ def login():
             
             mysql.connection.commit()
             # Redirecting to home page
-            if(employee):
-                return  render_template('empHome.html')
-            else:
-                return render_template('custHome.html')
+            return  redirect('/')
+            
         else:
             # Account doesnt exist 
             
@@ -126,5 +142,17 @@ def login():
 
 
 
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    session.pop('loggedin', None)
+    session.pop('userid', None)
+    session.pop('employee', None)
+    # Redirect to login page
+    return redirect('/')
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+
