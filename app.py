@@ -152,6 +152,25 @@ def logout():
 
 
 
+@app.route('/customers', methods=['GET', 'POST'])
+def customers():
+    if(session):
+        if(session["loggedin"]):
+            global employee
+            employee=session['employee']
+            if(employee):
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                print(session['userid'])
+                cursor.execute('SELECT * FROM employee WHERE user_id = %s', (session['userid'],))
+                account = cursor.fetchall()
+                print(account)
+                if(account):
+                    return  render_template('customers.html',empname=account)
+            
+
+    return redirect('/')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
 
