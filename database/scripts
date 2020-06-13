@@ -51,3 +51,27 @@ VALUES
 
 
 -----------------------------------------------------------------------------------------------
+
+create customer table
+
+> create table customer(
+    ssn_id int not null,
+    cust_id int not null auto_increment,
+    cust_name varchar(100) not null,
+    cust_pass varchar(100) not null,
+    age int,
+    address_1 varchar(100),
+    address_2 varchar(100),
+    city varchar(20),
+    state varchar(20),
+    primary key (cust_id)
+    );
+
+start customer ID at 1000
+
+> alter table customer auto_increment=100000000;
+
+insert values into customer table
+
+> insert into customer(ssn_id, cust_name, cust_pass, age, address_1, address_2, city,state)
+  values(123, 'cust1', 'pass1', 40, 'street no 7', 'abc colony', 'hyderabad', 'telangana');
