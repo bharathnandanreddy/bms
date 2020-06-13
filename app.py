@@ -98,7 +98,7 @@ def login():
         if account:
             # Creating session data
             session['loggedin'] = True
-            session['username'] = account['user_id']
+            session['userid'] = account['user_id']
             session['employee']= employee
 
             ts = time.time()
