@@ -187,6 +187,8 @@ def accounts():
                 
                 if(account):
                     return  render_template('accounts.html',accounts=account)
+                else:
+                    return render_template('accounts.html', accounts=account, msg='No account details\n Click on Add account to add account details')
             
 
     return redirect('/')
