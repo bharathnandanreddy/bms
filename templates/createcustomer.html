@@ -11,7 +11,7 @@
 			<form action="{{ url_for('createCustomer') }}" method="post" autocomplete="off">
 				<div class="row">
                     <div class="col"  style="margin-right:30px">
-                        <input type="number" name="ssn_id" placeholder="Customer SSN ID" id="ssn_id" style=" width: 310px;
+                        <input  type="number" name="ssn_id" placeholder="Customer SSN ID" id="ssn_id" style=" width: 310px;
                         height: 50px;
                         border: 1px solid #dee0e4;
                         margin-bottom: 20px;
@@ -39,7 +39,7 @@
                 </div>
                 <div class="row">
                     <div class="col" style="margin-right:30px">
-                        <input type="number" name="age" placeholder="Age" id="age" style=" width: 310px;
+                        <input  type="number" name="age" placeholder="Age" id="age" style=" width: 310px;
                         height: 50px;
                         border: 1px solid #dee0e4;
                         margin-bottom: 20px;
@@ -49,9 +49,15 @@
                         <input type="text" name="state" placeholder="State" id="state" required>
                     </div>
                 </div>
-				<div class="msg">{{ msg }}</div>
+                
+                <div class="container">
+                    <center>{{ msg }}</center>
+                </div>
+                
+				
 				<input type="submit" value="Create">
-			</form>
+            </form>
+            
         </div>
 
 {% endblock content%}
