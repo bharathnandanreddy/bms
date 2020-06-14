@@ -418,7 +418,7 @@ def updateCustomer(cust_id):
                     ts = time.time()
                     print("cust id", cust_id)
                     timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                    cursor.execute('UPDATE customer_status set message=%s ,last_updated=%s WHERE cust_id=%s', ("Customer details updates", timestamp, cust_id))
+                    cursor.execute('UPDATE customer_status set message=%s ,last_updated=%s WHERE cust_id=%s', ("Customer details updated", timestamp, cust_id))
                     mysql.connection.commit()
 
                     cursor.execute('SELECT * FROM customer WHERE cust_id=%s', (cust_id, ))
