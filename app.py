@@ -23,7 +23,7 @@ app.config['MYSQL_DB'] = 'bms'
 
 mysql = MySQL(app)
 employee=False
-user_view="Customer/SSN ID or Account ID "
+user_view="Account/SSN/Customer-ID "
 empVisible=""
 custVisible="active"
 
@@ -99,7 +99,6 @@ def login():
 
     if request.method == 'POST' and 'id' in request.form and 'password' in request.form:
 
-        
 
         username = request.form['id']
         password = request.form['password']
@@ -108,34 +107,44 @@ def login():
 
         if(employee):
             cursor.execute('SELECT * FROM empstore WHERE user_id = %s AND password = %s', (username, password))
-        else:
-            cursor.execute('SELECT  customer.cust_id ,customer.cust_name  FROM customer,account WHERE customer.cust_id=account.cust_id and customer.cust_pass=%s and (customer.cust_id=%s or customer.ssn_id=%s or account.acc_id=%s);', (password,username,username,username))
-        # Fetch one record and return result
-        account = cursor.fetchone()
-        # If account exists 
-        if account:
-            # Creating session data
-            session['loggedin'] = True
-            session['userid'] = account['user_id']
-            session['employee']= employee
+            # Fetch one record and return result
+            account = cursor.fetchone()
+            # If account exists 
+            if account:
+                # Creating session data
+                session['loggedin'] = True
+                session['userid'] = account['user_id']
+                session['employee']= employee
 
-            ts = time.time()
-            timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            print(timestamp)
-            if(employee):
+                ts = time.time()
+                timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+                print(timestamp)
                 cursor.execute('UPDATE empstore SET timestamp = %s WHERE  user_id = %s;',(timestamp,account['user_id']))
+                mysql.connection.commit()
+                return  redirect('/')
             else:
-                cursor.execute('UPDATE userstore SET timestamp = %s WHERE  user_id = %s;',(timestamp,account['user_id']))
-
-            
-            mysql.connection.commit()
-            # Redirecting to home page
-            return  redirect('/')
-            
+                # Account doesnt exist 
+                msg = 'Incorrect username/password!!!'
         else:
-            # Account doesnt exist 
+            try : 
+                username= int (username)
+                cursor.execute('SELECT  customer.cust_id ,customer.cust_name  FROM customer,account WHERE customer.cust_id=account.cust_id and customer.cust_pass=%s and (customer.cust_id=%s or customer.ssn_id=%s or account.acc_id=%s);', (password,username,username,username))
+                account = cursor.fetchone()
+                # If account exists 
+                if account:
+                    session['loggedin'] = True
+                    session['cust_id'] = account['cust_id']
+                    session['employee']= employee
+                # Redirecting to home page
+                    return  redirect('/')
+                
+                else:
+                    # Account doesnt exist 
+                    
+                    msg = 'Incorrect username/password!!!'
             
-            msg = 'Incorrect username/password!!!'
+            except:
+                msg = 'Incorrect username/password!!!'
     # Show the login form with message (if any)
     
     return render_template('index.html',username=user_view, msg=msg,emp=empVisible,cust=custVisible)
