@@ -161,11 +161,56 @@ def customers():
             if(employee):
                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
                 print(session['userid'])
-                cursor.execute('SELECT * FROM employee WHERE user_id = %s', (session['userid'],))
+                cursor.execute('SELECT * FROM customer_status')
                 account = cursor.fetchall()
-                print(account)
+                
                 if(account):
-                    return  render_template('customers.html',empname=account)
+                    return  render_template('customers.html',customers=account)
+            
+
+    return redirect('/')
+
+@app.route('/customers/', methods=['GET', 'POST'])
+def searchCustomer():
+   
+    if(session):
+        if(session["loggedin"]):
+            global employee
+            employee=session['employee']
+            if(employee):
+                
+                if request.method == 'POST' and 'search' in request.form:
+                    cid= request.form['search']
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    print(cid)
+            
+                    cursor.execute('select * from customer_status where ssn_id=%s or cust_id=%s;',(int(cid),int(cid),))
+                    account = cursor.fetchall()
+
+                    print('fecting',account)
+                
+                    if(account):
+                        return  render_template('customers.html',customers=account)
+            
+
+    return redirect('/customers')
+
+
+@app.route('/customers/details/<int:cid>', methods=['GET', 'POST'])
+def customerDetails(cid):
+    if(session):
+        if(session["loggedin"]):
+            global employee
+            employee=session['employee']
+            if(employee):
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                print('type',type(cid))
+                cursor.execute('SELECT * FROM customer where cust_id= %s ', (int(cid),))
+                account = cursor.fetchall()
+                
+                if(account):
+                    print(account)
+                    return  "account"
             
 
     return redirect('/')
