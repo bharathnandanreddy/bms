@@ -77,6 +77,10 @@ body {
     background-color: #2868c7;
     transition: background-color 0.2s;
 }
+#add:hover {
+    background-color: #2868c7;
+    transition: background-color 0.2s;
+}
 .navtop {
     background-color: #2f3947;
     height: 60px;
