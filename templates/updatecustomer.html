@@ -6,39 +6,52 @@
 
 
 {% block content %}
-    <h1>Search Customer</h1>
-    <form action="" method="post">
-        <label for="ssn_id">Customer SSN ID</label>
-        <input type="number" name=id id="ssn_id" required><br>
-        OR<br>
-        <label for="cust_id">Customer ID</label>
-        <input type="number" name="cust_id" id="cust_id" required>
-        <div class="msg">{{ msg }}</div>
-        <input type="submit" value="Search">
-    </form>
-
-        <div class="register">
-            <h1>Update Customer</h1>
-            <form action="{{ url_for('updateCustomer') }}" method="post" autocomplete="off">
-                <label for="ssn_id"></label>
-                <input type="number" name="ssn_id" placeholder="Customer SSN ID" id="ssn_id" required>
-                <label for="cust_name"></label>
-                <input type="text" name="cust_name" placeholder="Customer Name" id="cust_name" required>
-                <label for="cust_pass"></label>
-                <input type="password" name="cust_pass" placeholder="Password" id="cust_pass" required>
-                <label for="age"></label>
-                <input type="number" name="age" placeholder="Age" id="age" required>
-                <label for="add_1"></label>
-                <input type="text" name="add_1" placeholder="Address Line 1" id="add_1" required>
-                <label for="add_2"></label>
-                <input type="text" name="add_2" placeholder="Address Line 2" id="add_2" required>
-                <label for="city"></label>
-                <input type="text" name="city" placeholder="City" id="city" required>
-                <label for="state"></label>
-                <input type="text" name="state" placeholder="State" id="state" required>
-                <div class="msg">{{ msg }}</div>
-                <input type="submit" value="Create">
-            </form>
+		<div class="register" style="width:60%">
+			<h1>Update Customer</h1>
+			<form action="{{ url_for('updateCustomer') }}" method="post" autocomplete="off">
+				<div class="row">
+                    <div class="col"  style="margin-right:30px">
+                        <input type="number" name="ssn_id" placeholder="Customer SSN ID" id="ssn_id" style=" width: 310px;
+                        height: 50px;
+                        border: 1px solid #dee0e4;
+                        margin-bottom: 20px;
+                        padding: 0 15px;" required>
+                    </div>
+                    <div class="col">
+                        <input type="text" name="add_1" placeholder="Address Line 1" id="add_1" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col" style="margin-right:30px">
+                        <input type="text" name="cust_name" placeholder="Customer Name" id="cust_name" required>
+                    </div>
+                    <div class="col">
+                        <input type="text" name="add_2" placeholder="Address Line 2" id="add_2" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col" style="margin-right:30px">
+                        <input type="password" name="cust_pass" placeholder="Password" id="cust_pass" required>
+                    </div>
+                    <div class="col">
+                        <input type="text" name="city" placeholder="City" id="city" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col" style="margin-right:30px">
+                        <input type="number" name="age" placeholder="Age" id="age" style=" width: 310px;
+                        height: 50px;
+                        border: 1px solid #dee0e4;
+                        margin-bottom: 20px;
+                        padding: 0 15px;" required>
+                    </div>
+                    <div class="col">
+                        <input type="text" name="state" placeholder="State" id="state" required>
+                    </div>
+                </div>
+				<div class="msg">{{ msg }}</div>
+				<input type="submit" value="Create">
+			</form>
         </div>
 
 {% endblock content%}
