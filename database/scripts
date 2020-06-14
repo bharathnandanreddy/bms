@@ -125,6 +125,10 @@ InserTing values
     (1002,'user2','password',20, 'add1','add2','city','state' );
 
 
+> DELETE FROM customer 
+WHERE
+    cust_id = 100000000;
+
 ---------------------------------------------------------------------------------------------------
 
  > create table customer_status(
@@ -146,3 +150,55 @@ InserTing values
    )
    VALUES
     (1002,100000000,'active',"the account created succuessfully",'2016-01-01 00:00:01'  );
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+>  create table account(
+    acc_id int not null  auto_increment,
+    cust_id int not null,
+    acc_type varchar(100) not null,
+    amount int,
+    primary key (acc_id),
+    FOREIGN KEY (cust_id) REFERENCES customer(cust_id));
+   
+> ALTER TABLE account AUTO_INCREMENT=100000000;
+   
+
+> INSERT INTO account(
+   cust_id ,
+   acc_type ,
+    amount 
+
+   )
+   VALUES
+    (100000010,'savings', 1000 );
+
+
+--------------------------------------------------------------------------------------------------------------------------
+
+
+ > create table account_status(
+    acc_id int not null,
+    cust_id int not null,
+    status varchar(20) not null,
+    message varchar(200) not null,
+    last_updated timestamp,
+    primary key (acc_id),
+    FOREIGN KEY (acc_id) REFERENCES account(acc_id),
+    FOREIGN KEY (cust_id) REFERENCES customer(cust_id));
+
+ >   INSERT INTO account_status(
+   acc_id ,
+    cust_id ,
+   status ,
+    message ,
+    last_updated
+
+   )
+   VALUES
+    (100000000,100000010,'active',"the account created succuessfully",'2016-01-01 00:00:01'  );
+
+
