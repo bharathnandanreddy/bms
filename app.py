@@ -274,7 +274,7 @@ def accountDetails(cid):
                 
                 if(account):
                     print(account)
-                    return  render_template('accountdetails.html',customer=account)
+                    return  render_template('accountdetails.html',account=account)
             
 
     return redirect('/')
@@ -426,6 +426,34 @@ def deleteCustomer(cid):
                 
                 if(account):
                     return  render_template('customers.html',customers=account,msg=msg)
+            
+          
+    
+    return redirect('/')
+
+
+@app.route('/accounts/<int:cid>', methods=['GET', 'POST'])
+def deleteAccount(cid):
+    if(session):
+        if(session["loggedin"]):
+            global employee
+            employee=session['employee']
+            if(employee):
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute('DELETE FROM account_status WHERE acc_id = %s',(cid,))
+                mysql.connection.commit()
+                msg = 'Account record successfully deleted'
+                cursor.execute('DELETE FROM account WHERE acc_id = %s',(cid,))
+                mysql.connection.commit()
+                
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                
+                cursor.execute('SELECT account_status.acc_id ,account_status.cust_id ,account_status.status ,account_status.message ,account_status.last_updated,account.acc_type  FROM account_status,account WHERE account_status.acc_id=account.acc_id;')
+                account = cursor.fetchall()
+               
+                
+                if(account):
+                    return  render_template('accounts.html',accounts=account,msg=msg)
             
           
     
