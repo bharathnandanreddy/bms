@@ -202,3 +202,6 @@ WHERE
     (100000000,100000010,'active',"the account created succuessfully",'2016-01-01 00:00:01'  );
 
 
+-----------------------------------------------------------------------------------------------------------
+
+SELECT  customer.cust_id ,customer.cust_name  FROM customer,account WHERE customer.cust_id=account.cust_id and customer.cust_pass="xfgcvbn " and (customer.cust_id=11 or customer.ssn_id=1236789 or account.acc_id=100000001);

@@ -23,7 +23,7 @@ app.config['MYSQL_DB'] = 'bms'
 
 mysql = MySQL(app)
 employee=False
-user_view="customer-ID"
+user_view="Customer/SSN ID or Account ID "
 empVisible=""
 custVisible="active"
 
@@ -66,7 +66,7 @@ def logas(emp):
         global user_view
         custVisible=""
         employee=True
-        user_view="Employee-ID"
+        user_view="Executive-ID"
         empVisible="active"
         return render_template('index.html',username=user_view, msg='',emp=empVisible,cust=custVisible)
     else:
@@ -74,7 +74,7 @@ def logas(emp):
         empVisible=""
         custVisible="active"
         employee=False
-        user_view="Customer-ID"
+        user_view="Account/SSN/Customer-ID "
         return render_template('index.html',username=user_view, msg='',emp=empVisible,cust=custVisible)
 
 
@@ -109,7 +109,7 @@ def login():
         if(employee):
             cursor.execute('SELECT * FROM empstore WHERE user_id = %s AND password = %s', (username, password))
         else:
-            cursor.execute('SELECT * FROM userstore WHERE user_id = %s AND password = %s', (username, password))
+            cursor.execute('SELECT  customer.cust_id ,customer.cust_name  FROM customer,account WHERE customer.cust_id=account.cust_id and customer.cust_pass=%s and (customer.cust_id=%s or customer.ssn_id=%s or account.acc_id=%s);', (password,username,username,username))
         # Fetch one record and return result
         account = cursor.fetchone()
         # If account exists 
