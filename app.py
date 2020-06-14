@@ -165,7 +165,9 @@ def customers():
                 account = cursor.fetchall()
                 
                 if(account):
-                    return  render_template('customers.html',customers=account)
+                    return render_template('customers.html',customers=account)
+                else:
+                    return render_template('customers.html', customers=account, msg='No customer details\n Click on Add customer to add customer details')
             
 
     return redirect('/')
@@ -388,15 +390,40 @@ def createAccount():
 
     
 
-@app.route('/customer/updatecustomer', methods=['GET', 'POST'])
-def updateCustomer():
+@app.route('/customer/updatecustomer/<int:cust_id>', methods=['GET', 'POST'])
+def updateCustomer(cust_id):
+    
     if(session):
         if(session["loggedin"]):
             global employee
             employee=session['employee']
             if(employee):
-                msg=''
-                return render_template('updatecustomer.html',msg=msg)
+                print(request.form)
+                if request.method == 'POST' and 'ssn_id' in request.form and 'cust_name' in request.form and 'cust_pass' in request.form and 'age' in request.form and 'add_1' in request.form and 'add_2' in request.form and 'city' in request.form and 'state' in request.form:
+                    ssn_id = request.form['ssn_id']
+                    cust_name = request.form['cust_name']
+                    cust_pass = request.form['cust_pass']
+                    age = request.form['age']
+                    add_1 = request.form['add_1']
+                    add_2 = request.form['add_2']
+                    city = request.form['city']
+                    state = request.form['state'] 
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    print('type',type(cust_id))
+                    cursor.execute('UPDATE customer set cust_name=%s, cust_pass=%s, age=%s, address_1=%s, address_2=%s, city=%s, state=%s WHERE cust_id= %s ', (cust_name, cust_pass, age, add_1, add_2, city, state, int(cust_id)))
+                    mysql.connection.commit()
+
+                    ts = time.time()
+                    print("cust id", cust_id)
+                    timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+                    cursor.execute('UPDATE customer_status set message=%s ,last_updated=%s WHERE cust_id=%s', ("Customer details updates", timestamp, cust_id))
+                    mysql.connection.commit()
+
+                    cursor.execute('SELECT * FROM customer WHERE cust_id=%s', (cust_id, ))
+                    account = cursor.fetchone()
+                    return render_template('custDetails.html',customer=account)
+                else:
+                    print('form incomplete')
             
           
 
@@ -425,7 +452,7 @@ def deleteCustomer(cid):
                 account = cursor.fetchall()
                 
                 if(account):
-                    return  render_template('customers.html',customers=account,msg=msg)
+                    return render_template('customers.html', customers=account, msg=msg)
             
           
     
