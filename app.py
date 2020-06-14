@@ -413,6 +413,13 @@ def deleteCustomer(cid):
             employee=session['employee']
             if(employee):
                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+                cursor.execute('DELETE FROM account_status WHERE cust_id = %s',(cid,))
+                mysql.connection.commit()
+                msg = 'Account record successfully deleted'
+                cursor.execute('DELETE FROM account WHERE cust_id = %s',(cid,))
+                mysql.connection.commit()
+
                 cursor.execute('DELETE FROM customer_status WHERE cust_id = %s',(cid,))
                 mysql.connection.commit()
                 msg = 'Customer record successfully deleted'
