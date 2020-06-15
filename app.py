@@ -533,11 +533,6 @@ def deposit(cid):
                         else:
                             msg='Invalid amount'
                         return render_template('deposit.html',account=account,msg=msg)
-
-                    
-                    
-                    
-
                
                 else:
                     msg=''
@@ -579,11 +574,6 @@ def withdraw(cid):
                                  msg= 'Invalid amount'
                         return render_template('withdraw.html',account=account,msg=msg)
 
-                    
-                    
-                    
-
-               
                 else:
                     msg=''
                     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -634,11 +624,6 @@ def transfer(cid):
                                  msg= 'Invalid amount'
                         return render_template('transfer.html',account=account,msg=msg)
 
-                    
-                    
-                    
-
-               
                 else:
                     msg=''
                     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -651,7 +636,23 @@ def transfer(cid):
                
 
     return redirect('/')
-    
+
+@app.route('/youraccounts', methods=['GET', 'POST'])
+def yourAccounts():
+        if(session):
+            if(session["loggedin"]):
+                global employee
+                employee=session['employee']
+                if(employee !=True):
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cust_id=session['cust_id']
+                    cursor.execute('SELECT * FROM account where cust_id= %s ', (int(cust_id),))
+                    accounts = cursor.fetchall()
+                    
+                    if(accounts):
+                        print(accounts)
+                        return  render_template('custAccountDetails.html', accounts=accounts)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
