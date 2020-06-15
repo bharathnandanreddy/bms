@@ -568,7 +568,7 @@ def withdraw(cid):
                     if(account):
                         msg='Amount withdrawal successful'
                         print(int(request.form['deposit_amount']),(account['amount']))
-                        if(int(request.form['deposit_amount'])<account['amount'] and  int(request.form['deposit_amount'])>=1 and  (account['amount'])>=1):
+                        if(int(request.form['deposit_amount'])<=account['amount'] and  int(request.form['deposit_amount'])>=1 and  (account['amount'])>=1):
                             account['amount']=account['amount']-int(request.form['deposit_amount'])
                             cursor.execute('UPDATE account SET amount = %s WHERE  acc_id = %s;',(account['amount'],cid))
                             mysql.connection.commit()
