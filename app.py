@@ -595,6 +595,61 @@ def withdraw(cid):
                         return render_template('withdraw.html',account=account,msg=msg)
                
 
+    return redirect ('/')
+
+
+@app.route('/transfer/<int:cid>', methods=['GET', 'POST'])
+def transfer(cid):
+    
+    if(session):
+        if(session["loggedin"]):
+            global employee
+            employee=session['employee']
+            if(employee !=True):
+                if request.method == 'POST' and 'transfer_amount' in request.form and 'target_acc' in request.form and 'target_acc_type' in request.form :
+                    msg=''
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('SELECT   * FROM account WHERE cust_id=%s and acc_id=%s',(session['cust_id'],cid))
+                    account = cursor.fetchone()
+                    if(account):
+                        msg='Amount transfer successful'
+                        
+                        if(int(request.form['transfer_amount'])<=account['amount'] and  int(request.form['transfer_amount'])>=1 and  (account['amount'])>=1):
+                            cursor.execute('SELECT   * FROM account WHERE acc_id=%s and acc_type=%s',(request.form['target_acc'],request.form['target_acc_type']))
+                            target=cursor.fetchone()
+                            if(target):
+                                account['amount']=account['amount']-int(request.form['transfer_amount'])
+                                target['amount']=target['amount']+int(request.form['transfer_amount'])
+                                cursor.execute('UPDATE account SET amount = %s WHERE  acc_id = %s;',(account['amount'],cid))
+                                cursor.execute('UPDATE account SET amount = %s WHERE  acc_id = %s;',(target['amount'],request.form['target_acc']))
+                                mysql.connection.commit()
+                            else:
+                                msg='Target account not found '
+
+                            
+                        else:
+                            if(int(request.form['transfer_amount'])>account['amount']):
+                                msg='insufficient funds'
+                            else:
+                                 msg= 'Invalid amount'
+                        return render_template('transfer.html',account=account,msg=msg)
+
+                    
+                    
+                    
+
+               
+                else:
+                    msg=''
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('SELECT   * FROM account WHERE cust_id=%s and acc_id=%s',(session['cust_id'],cid))
+                    account = cursor.fetchone()
+                    print(account)
+                    
+                    if(account):
+                        return render_template('transfer.html',account=account,msg=msg)
+               
+
     return redirect('/')
     
 
