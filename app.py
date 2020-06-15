@@ -41,7 +41,13 @@ def index():
                 if(account):
                     return  render_template('empHome.html',empname=account['emp_name'])
             else:
-                return render_template('custHome.html')
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                print(session['cust_id'])
+                cursor.execute('SELECT customer.cust_name, account.acc_id FROM customer,account WHERE account.cust_id=customer.cust_id and customer.cust_id = %s', (session['cust_id'],))
+                account = cursor.fetchall()
+                print(account)
+                if(account):
+                    return  render_template('custHome.html',accounts=account)
     
     return render_template('index.html',username=user_view, msg='',emp=empVisible,cust=custVisible)
 
@@ -155,6 +161,7 @@ def login():
 def logout():
     session.pop('loggedin', None)
     session.pop('userid', None)
+    session.pop('cust_id', None)
     session.pop('employee', None)
     # Redirect to login page
     return redirect('/')
@@ -502,6 +509,92 @@ def deleteAccount(cid):
             
           
     
+    return redirect('/')
+@app.route('/deposit/<int:cid>', methods=['GET', 'POST'])
+def deposit(cid):
+    
+    if(session):
+        if(session["loggedin"]):
+            global employee
+            employee=session['employee']
+            if(employee !=True):
+                if request.method == 'POST' and 'deposit_amount' in request.form :
+                    msg=''
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('SELECT   * FROM account WHERE cust_id=%s and acc_id=%s',(session['cust_id'],cid))
+                    account = cursor.fetchone()
+                    if(account):
+                        msg='Amount deposition successful'
+                        if(int(request.form['deposit_amount'])>=1):
+                            print(int(request.form['deposit_amount']),type(account['amount']))
+                            account['amount']=int(request.form['deposit_amount'])+account['amount']
+                            cursor.execute('UPDATE account SET amount = %s WHERE  acc_id = %s;',(account['amount'],cid))
+                            mysql.connection.commit()
+                        else:
+                            msg='Invalid amount'
+                        return render_template('deposit.html',account=account,msg=msg)
+
+                    
+                    
+                    
+
+               
+                else:
+                    msg=''
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('SELECT   * FROM account WHERE cust_id=%s and acc_id=%s',(session['cust_id'],cid))
+                    account = cursor.fetchone()
+                    print(account)
+                    
+                    if(account):
+                        return render_template('deposit.html',account=account,msg=msg)
+               
+
+    return redirect('/')
+    
+@app.route('/withdraw/<int:cid>', methods=['GET', 'POST'])
+def withdraw(cid):
+    
+    if(session):
+        if(session["loggedin"]):
+            global employee
+            employee=session['employee']
+            if(employee !=True):
+                if request.method == 'POST' and 'deposit_amount' in request.form :
+                    msg=''
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('SELECT   * FROM account WHERE cust_id=%s and acc_id=%s',(session['cust_id'],cid))
+                    account = cursor.fetchone()
+                    if(account):
+                        msg='Amount withdrawal successful'
+                        print(int(request.form['deposit_amount']),(account['amount']))
+                        if(int(request.form['deposit_amount'])<account['amount'] and  int(request.form['deposit_amount'])>=1 and  (account['amount'])>=1):
+                            account['amount']=account['amount']-int(request.form['deposit_amount'])
+                            cursor.execute('UPDATE account SET amount = %s WHERE  acc_id = %s;',(account['amount'],cid))
+                            mysql.connection.commit()
+                        else:
+                            if(int(request.form['deposit_amount'])>account['amount']):
+                                msg='insufficient funds'
+                            else:
+                                 msg= 'Invalid amount'
+                        return render_template('withdraw.html',account=account,msg=msg)
+
+                    
+                    
+                    
+
+               
+                else:
+                    msg=''
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('SELECT   * FROM account WHERE cust_id=%s and acc_id=%s',(session['cust_id'],cid))
+                    account = cursor.fetchone()
+                    print(account)
+                    
+                    if(account):
+                        return render_template('withdraw.html',account=account,msg=msg)
+               
+
     return redirect('/')
     
 
