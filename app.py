@@ -393,6 +393,7 @@ def createAccount():
                         print("cust id", cust_id)
                         timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
                         cursor.execute('INSERT INTO account_status(acc_id ,cust_id ,status ,message ,last_updated)VALUES(%s,%s,%s,%s,%s  );', (acc_id, cust_id, "Active", msg, timestamp))
+                        cursor.execute('INSERT INTO transactions(acc_id , amount, details, timestamp) VALUES(%s,%s,%s,%s);', (acc_id, amount, "Credit", timestamp))
                         mysql.connection.commit()
                     else:
                         msg="customer ID did not found.."
@@ -529,6 +530,9 @@ def deposit(cid):
                             print(int(request.form['deposit_amount']),type(account['amount']))
                             account['amount']=int(request.form['deposit_amount'])+account['amount']
                             cursor.execute('UPDATE account SET amount = %s WHERE  acc_id = %s;',(account['amount'],cid))
+                            ts = time.time()
+                            timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+                            cursor.execute('INSERT INTO transactions(acc_id , amount, details, timestamp) VALUES(%s,%s,%s,%s);', (account['acc_id'], request.form['deposit_amount'], "Credit", timestamp))
                             mysql.connection.commit()
                         else:
                             msg='Invalid amount'
@@ -566,6 +570,9 @@ def withdraw(cid):
                         if(int(request.form['deposit_amount'])<=account['amount'] and  int(request.form['deposit_amount'])>=1 and  (account['amount'])>=1):
                             account['amount']=account['amount']-int(request.form['deposit_amount'])
                             cursor.execute('UPDATE account SET amount = %s WHERE  acc_id = %s;',(account['amount'],cid))
+                            ts = time.time()
+                            timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+                            cursor.execute('INSERT INTO transactions(acc_id , amount, details, timestamp) VALUES(%s,%s,%s,%s);', (account['acc_id'], request.form['deposit_amount'], "Debit", timestamp))
                             mysql.connection.commit()
                         else:
                             if(int(request.form['deposit_amount'])>account['amount']):
@@ -612,6 +619,10 @@ def transfer(cid):
                                 target['amount']=target['amount']+int(request.form['transfer_amount'])
                                 cursor.execute('UPDATE account SET amount = %s WHERE  acc_id = %s;',(account['amount'],cid))
                                 cursor.execute('UPDATE account SET amount = %s WHERE  acc_id = %s;',(target['amount'],request.form['target_acc']))
+                                ts = time.time()
+                                timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+                                cursor.execute('INSERT INTO transactions(acc_id , amount, details, timestamp) VALUES(%s,%s,%s,%s);', (account['acc_id'], request.form['transfer_amount'], "Debit", timestamp))
+                                cursor.execute('INSERT INTO transactions(acc_id , amount, details, timestamp) VALUES(%s,%s,%s,%s);', (target['acc_id'], request.form['transfer_amount'], "Credit", timestamp))
                                 mysql.connection.commit()
                             else:
                                 msg='Target account not found '
