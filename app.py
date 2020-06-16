@@ -671,7 +671,8 @@ def transactions():
                         if request.method == 'POST' and 'acc_number' in request.form and 'from' in request.form and 'to' in request.form :
                             acc_id=request.form['acc_number']
                             from_date = datetime.datetime.strptime(request.form['from'], "%Y-%m-%d")
-                            to_date=datetime.datetime.strptime(request.form['to'], "%Y-%m-%d")
+                            to_date=datetime.datetime.strptime(request.form['to'], "%Y-%m-%d")+datetime.timedelta(days=1)
+                           
                             
                             cursor.execute('SELECT * FROM transactions where acc_id= %s and timestamp>=%s and timestamp<=%s', (int(acc_id),from_date,to_date))
                             trans = cursor.fetchall()
