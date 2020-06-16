@@ -684,7 +684,6 @@ def transactions():
                             from_date = datetime.datetime.strptime(request.form['from'], "%Y-%m-%d")
                             to_date=datetime.datetime.strptime(request.form['to'], "%Y-%m-%d")+datetime.timedelta(days=1)
                            
-                            
                             cursor.execute('SELECT * FROM transactions where acc_id= %s and timestamp>=%s and timestamp<=%s', (int(acc_id),from_date,to_date))
                             trans = cursor.fetchall()
                             print(trans)
