@@ -39,12 +39,11 @@ input[type="date"]:focus::before {
         {% endblock %}
 
 
-
         <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/popper.min.js') }}" ></script>
         <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/pdfmake.min.js') }}" ></script>
-        <script src="{{ url_for('static', filename='js/html2canvas.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jspdf.debug.js') }}"></script>
+
         
         {% block scripts %}
             

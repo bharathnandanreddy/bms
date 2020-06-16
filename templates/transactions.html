@@ -10,7 +10,7 @@
 <div style="display: flex;
 flex-wrap: wrap;
 justify-content: center;">
-  <div style="width: 70%;margin-top: 10px;">
+  <div id="bypassme" style="width: 70%;margin-top: 10px;">
 
     <div class="row" style="padding-right: 20px;padding-left: 20px;padding-top: 20px;" >
 
@@ -68,10 +68,11 @@ padding: 0 15px;" type="date"  name="to" placeholder="To  " id="to" required>
 
 
 
-    <div  style="margin-top: 10px;margin-bottom: 0px; width: 60%; max-height: 450px;  overflow-y: auto;" class="login">
+    <div id="trans_div"  style="margin-top: 10px;margin-bottom: 0px; width: 60%; max-height: 450px;  overflow-y: auto;" class="login">
       <div >
         <center>{{ msg }}</center>
     </div>
+
   
 <table id="trans_table" style="width:100%;"  class="table table-hover" >
     <thead>
@@ -147,24 +148,21 @@ padding: 0 15px;" type="date"  name="to" placeholder="To  " id="to" required>
     }
 
     $("#export").click(function(){
-        html2canvas($('#trans_table')[0], {
-                onrendered: function (canvas) {
-                    ctx = canvas.getContext("2d");
-                    ctx.font = "30pt Calibri";
-                
-     	            ctx.fillText("BMS", canvas.width - (3 * 30), canvas.height);
+        var pdf = new jsPDF('p', 'pt', 'letter');
 
-                  
-                    var data = canvas.toDataURL();
-                    var docDefinition = {
-                        content: [{
-                            image: data,
-                            width: 500
-                        }]
-                    };
-                    pdfMake.createPdf(docDefinition).download("statements.pdf");
-                }
-            });
+    source = $('#trans_div')[0];
+
+
+
+
+
+    pdf.fromHTML(source,
+    15, 15,
+    {
+        'width': 170, 
+    }, function (dispose) {
+        pdf.save('Test.pdf');
+    });
 
     });
     
