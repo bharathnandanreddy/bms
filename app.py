@@ -652,7 +652,35 @@ def yourAccounts():
                     if(accounts):
                         print(accounts)
                         return  render_template('custAccountDetails.html', accounts=accounts)
+        return redirect('/')
 
+@app.route('/transactions', methods=['GET', 'POST'])
+def transactions():
+        if(session):
+            if(session["loggedin"]):
+                global employee
+                employee=session['employee']
+                if(employee !=True):
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cust_id=session['cust_id']
+                    cursor.execute('SELECT acc_id FROM account where cust_id= %s ', (int(cust_id),))
+                    accounts = cursor.fetchall()
+                    
+                    if(accounts):
+                        
+                        if request.method == 'POST' and 'acc_number' in request.form and 'from' in request.form and 'to' in request.form :
+                            acc_id=request.form['acc_number']
+                            from_date = datetime.datetime.strptime(request.form['from'], "%Y-%m-%d")
+                            to_date=datetime.datetime.strptime(request.form['to'], "%Y-%m-%d")
+                            
+                            cursor.execute('SELECT * FROM transactions where acc_id= %s and timestamp>=%s and timestamp<=%s', (int(acc_id),from_date,to_date))
+                            trans = cursor.fetchall()
+                            print(trans)
+                            return  render_template('transactions.html', accounts=accounts, trans=trans)
+                        
+                        return  render_template('transactions.html', accounts=accounts )                                 
+                
+        return redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True)
