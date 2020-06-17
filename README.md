@@ -1,10 +1,7 @@
-# User Requirement Specification
+
 
 ## Retail Bank Management
 
-Author:
-
-Version: 1.
 
 
 ## Table of Contents
@@ -31,9 +28,6 @@ Version: 1.
       - 5.2.3 Withdraw Screen:
       - 5.2.4 Transfer Screen:
       - 5.2.5 Get Statement Screen:
-   - 5.3 Validations
-   - 5.4 Assumptions
-
 
 ## 1 Purpose of the document
 
