@@ -388,59 +388,5 @@ Output:
 ```
 Account statement, with each row showing date, transaction description, credit or debit, balance
 ```
-### 5.3 Validations
-
-Validations required for input.
-
-1. SSN, Account ID and Customer ID should be 9 digit
-2. Date should be of the format CCYY-MM-DD
-
-**Customer** (^)
-
-#### Input SSN ws_ssn 9 digit numeric
-
-#### Customer id ws_cust_id 9 digit numeric
-
-#### Name ws_name alphabet
-
-#### Address ws_adrs alphanumeric
-
-#### Age ws_age 3 digit numeric
-
-#### Account^
-
-#### Input Customer id ws_cust_id 9 digit numeric
-
-#### Account id ws_acct_id 9 digit numeric
-
-
-#### Account type ws_acct_type S or C
-
-#### Balance ws_acct_balance number add suffix 00
-
-#### CR data ws_acct_crdate CCYY-MM-DD
-
-#### CR last date ws_acct_lasttrdate CCYY-MM-DD
-
-#### Duration ws_acct_duration number
-
-#### Transactions
-
-#### Input Customer id ws_cust_id 9 digit numeric
-
-#### Account type ws_accnt_type S or C
-
-#### Amount ws_amt number
-
-#### Transaction date ws_trxn_date CCYY-MM-DD
-
-#### Source Acct type ws_src_typ S or C
-
-#### Target Acct type ws_tgt_typ S or C
-
-### 5.4 Assumptions
-
-Assumptions can be made and they are to be shared along with the Team details in the
-assumptions tab.
 
 
